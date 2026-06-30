@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz Cumpleaños Kristell 🌙✨</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- CIELO NOCTURNO -->
+<div class="sky" aria-hidden="true">
+  <div class="aurora"></div>
+  <div class="aurora"></div>
+  <div class="moon-obj"></div>
+</div>
+
+<!-- ESTRELLAS CANVAS -->
+<canvas id="starsCanvas" aria-hidden="true"></canvas>
+
+<!-- DESTELLOS FLOTANTES -->
+<div class="sparkles" id="sparkles" aria-hidden="true"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-label">✦ Feliz Cumpleaños ✦</p>
+    <h1 class="hero-name">Kristell</h1>
+    <p class="hero-sub">Para ti, desde el otro lado de la distancia</p>
+    <div class="hero-divider"><span>🌙</span></div>
+  </header>
+
+  <!-- SOBRE -->
+  <main class="scene" role="main">
+    <div class="env-wrap" id="envWrap"
+         role="button" tabindex="0"
+         aria-label="Haz clic para abrir tu carta de cumpleaños">
+
+      <div class="letter-peek" id="letterPeek" aria-hidden="true"></div>
+
+      <div>
+        <div class="env-body-bg"></div>
+        <div class="env-tri-bot"></div>
+        <div class="env-tri-left"></div>
+        <div class="env-tri-right"></div>
+        <div class="env-flap"></div>
+        <div class="env-moon-seal" aria-hidden="true">🌙</div>
+        <span class="env-star">★</span>
+        <span class="env-star">✦</span>
+        <span class="env-star">✧</span>
+      </div>
+
+      <span class="hint" aria-hidden="true">✦ Toca para abrir tu carta ✦</span>
+    </div>
+  </main>
+
+  <!-- MODAL CARTA -->
+  <div class="letter-modal" id="letterModal" role="dialog"
+       aria-modal="true" aria-label="Carta de cumpleaños para Kristell">
+
+    <div class="modal-bg" id="modalBg"></div>
+
+    <article class="letter-card">
+      <div class="corner c-tl"></div>
+      <div class="corner c-tr"></div>
+      <div class="corner c-bl"></div>
+      <div class="corner c-br"></div>
+
+      <button class="close-btn" id="closeBtn" aria-label="Cerrar carta">✕</button>
+
+      <header class="card-header">
+        <span class="card-date">✦ Tu Cumpleaños · 2026 ✦</span>
+        <h2 class="card-to">Mi Kristell</h2>
+        <p class="card-subtitle">Desde donde estoy, con todo mi corazón</p>
+        <div class="card-sep">🌙 ✦ 🌙</div>
+      </header>
+
+      <div class="card-body">
+        <p>
+          Kristell, hoy que es tu cumpleaños quiero que sepas que aunque la distancia nos separe,
+          <span class="glow-word">tú eres lo primero que pienso cada mañana</span> y lo último antes de dormir.
+          Cada día que pasa te llevo conmigo, en cada momento, en cada silencio.
+          Estás en mí más de lo que cualquier distancia puede borrar.
+        </p>
+
+        <p>
+          La distancia duele, claro que sí. Pero también me ha enseñado algo que nunca olvidaré:
+          que cuando alguien <span class="teal-word">vale de verdad</span>, el corazón no entiende de kilómetros.
+          Y tú vales todo, Kristell. Cada espera, cada momento de silencio,
+          cada noche extrañándote — todo tiene sentido porque eres tú.
+        </p>
+
+        <p>
+          Tengo fe en que el tiempo nos acercará. Sé que habrá un momento en el que
+          la distancia solo sea un recuerdo, y estaremos <span class="gold-word">juntos, por fin</span>.
+          Ese día lo espero con una emoción que no me cabe en el pecho.
+          Hasta entonces, soy tuyo desde aquí, y lo seré desde allá también.
+        </p>
+
+        <p class="last-para">
+          Y cuando ese día llegue, te haré el amor con todo el amor guardado,
+          y lo disfrutaremos los dos — solo tú y yo, sin distancia entre nosotros. ❤️
+        </p>
+      </div>
+
+      <footer class="card-sign">
+        <span class="sign-label">Con todo mi amor, desde lejos pero muy cerca de ti,</span>
+        <span class="sign-name">El tuyo siempre</span>
+        <span class="sign-hearts">❤ ❤ ❤</span>
+      </footer>
+    </article>
+  </div>
+
+  <!-- ESFERA DE AMOR -->
+  <section class="globe-section" aria-label="Esfera de mensajes de amor">
+    <h2 class="globe-title">Todo lo que siento por ti</h2>
+    <div class="globe-wrap">
+      <div class="globe-halo" aria-hidden="true"></div>
+      <canvas id="globeCanvas" aria-label="Esfera giratoria con mensajes de amor para Kristell"></canvas>
+    </div>
+    <p class="globe-hint">Arrastra para girar · Cada estrella, una verdad</p>
+  </section>
+
+  <footer class="page-footer">
+    Feliz Cumpleaños, Kristell &nbsp;·&nbsp; Te amo desde aquí hasta donde estés 🌙
+  </footer>
+
+</div>
+
+<script>
+/* ══ ESTRELLAS en canvas ══ */
+(function() {
+  const c   = document.getElementById('starsCanvas');
+  const ctx = c.getContext('2d');
+
+  function resize() {
+    c.width  = window.innerWidth;
+    c.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); drawStars(); });
+
+  const stars = [];
+  for (let i = 0; i < 280; i++) {
+    stars.push({
+      x: Math.random(),
+      y: Math.random() * 0.7,
+      r: Math.random() * 1.4 + 0.3,
+      a: Math.random(),
+      sp: Math.random() * 0.012 + 0.004,
+      ph: Math.random() * Math.PI * 2,
+      col: Math.random() < 0.15 ? '#f5d76e' : Math.random() < 0.1 ? '#7ecfc8' : '#f0eeff',
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    const t = Date.now() * 0.001;
+    stars.forEach(s => {
+      const alpha = 0.3 + 0.7 * ((Math.sin(t * s.sp * 60 + s.ph) + 1) / 2);
+      ctx.beginPath();
+      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = s.col;
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(drawStars);
+  }
+  drawStars();
+})();
+
+/* ══ DESTELLOS FLOTANTES ══ */
+(function() {
+  const cont = document.getElementById('sparkles');
+  const syms = ['✦','✧','⋆','·','★','✨','💫','🌟'];
+  const cols = ['#c2b8e8','#f0b8c8','#f5d76e','#7ecfc8','#ffffff'];
+  for (let i = 0; i < 40; i++) {
+    const el = document.createElement('span');
+    el.className = 'sp';
+    el.textContent = syms[Math.floor(Math.random()*syms.length)];
+    const dur = Math.random() * 18 + 10;
+    const del = Math.random() * 20;
+    el.style.cssText = `
+      left: ${Math.random()*100}vw;
+      font-size: ${Math.random()*10+8}px;
+      color: ${cols[Math.floor(Math.random()*cols.length)]};
+      animation-duration: ${dur}s;
+      animation-delay: ${del}s;
+    `;
+    cont.appendChild(el);
+  }
+})();
+
+/* ══ SOBRE / CARTA ══ */
+const envWrap   = document.getElementById('envWrap');
+const modal     = document.getElementById('letterModal');
+const closeBtn  = document.getElementById('closeBtn');
+const modalBg   = document.getElementById('modalBg');
+
+function openLetter() {
+  if (envWrap.classList.contains('opened')) return;
+  envWrap.classList.add('opening');
+  setTimeout(() => {
+    envWrap.classList.add('opened');
+    modal.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }, 980);
+}
+function closeLetter() {
+  modal.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+envWrap.addEventListener('click', openLetter);
+envWrap.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(); }
+});
+closeBtn.addEventListener('click', closeLetter);
+modalBg.addEventListener('click', closeLetter);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLetter(); });
+
+
+/* ══ ESFERA 3D ══ */
+(function() {
+  const canvas = document.getElementById('globeCanvas');
+  const ctx    = canvas.getContext('2d');
+
+  const MSGS = [
+    'Te amo', 'Te quiero', 'Mi cielo', 'Eres mi todo',
+    'Mi Kristell', 'Amor eterno', 'Te extraño',
+    'Siempre tuyo', 'Mi luna', 'Te adoro',
+    'Mi corazón', 'Juntos pronto', 'Te amo tanto',
+    'Eres mi paz', 'Mi estrella', 'Sin distancias',
+    'Solo tú', 'Mi vida', 'Infinitamente',
+    'Feliz cumple', 'Eres especial', '❤️',
+    'Mi todo', 'Pronto juntos', 'Te pienso siempre',
+    'Mi universo', 'Nunca te suelto', 'Tuyo siempre',
+    'Amor sin fin', '🌙 para ti',
+  ];
+
+  const COLORS = [
+    '#c2b8e8','#f0b8c8','#f5d76e','#7ecfc8',
+    '#e8a0c0','#d4a843','#a090d8','#f0d0e0',
+  ];
+
+  let W, H, R, cx, cy;
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    const sz   = Math.min(wrap.clientWidth, wrap.clientHeight, 340);
+    canvas.width  = sz * window.devicePixelRatio;
+    canvas.height = sz * window.devicePixelRatio;
+    canvas.style.width  = sz + 'px';
+    canvas.style.height = sz + 'px';
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    W = sz; H = sz; R = sz * 0.42; cx = W/2; cy = H/2;
+    buildTags();
+  }
+
+  let tags = [];
+  function buildTags() {
+    tags = [];
+    const n = MSGS.length;
+    const g = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < n; i++) {
+      const y   = 1 - (i/(n-1)) * 2;
+      const rad = Math.sqrt(1 - y*y);
+      const th  = g * i;
+      tags.push({
+        x: Math.cos(th)*rad, y, z: Math.sin(th)*rad,
+        text: MSGS[i],
+        color: COLORS[i % COLORS.length],
+        sz: 10 + Math.random()*5,
+      });
+    }
+  }
+
+  let rotX = 0.25, rotY = 0;
+  let dragging = false, lx = 0, ly = 0;
+
+  function rot(p, rx, ry) {
+    const x1 = p.x*Math.cos(ry) - p.z*Math.sin(ry);
+    const z1 = p.x*Math.sin(ry) + p.z*Math.cos(ry);
+    const y1 = p.y*Math.cos(rx) - z1*Math.sin(rx);
+    const z2 = p.y*Math.sin(rx) + z1*Math.cos(rx);
+    return { x:x1, y:y1, z:z2 };
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    /* Esfera */
+    const sg = ctx.createRadialGradient(cx-R*0.3, cy-R*0.3, R*0.04, cx, cy, R);
+    sg.addColorStop(0,   'rgba(60,30,110,0.6)');
+    sg.addColorStop(0.5, 'rgba(15,10,40,0.75)');
+    sg.addColorStop(1,   'rgba(4,2,12,0.9)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI*2);
+    ctx.fillStyle = sg;
+    ctx.fill();
+
+    /* Borde */
+    const bg = ctx.createLinearGradient(cx-R, cy-R, cx+R, cy+R);
+    bg.addColorStop(0,   'rgba(123,109,181,0.55)');
+    bg.addColorStop(0.5, 'rgba(192,80,112,0.4)');
+    bg.addColorStop(1,   'rgba(123,109,181,0.55)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI*2);
+    ctx.strokeStyle = bg;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    /* Textos */
+    const proj = tags.map(t => {
+      const p     = rot(t, rotX, rotY);
+      const scale = (p.z + 1.5) / 2.5;
+      return { ...t, px: cx+p.x*R, py: cy-p.y*R, pz: p.z, scale };
+    }).sort((a,b) => a.pz - b.pz);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, R-1, 0, Math.PI*2);
+    ctx.clip();
+
+    proj.forEach(t => {
+      if (t.pz < -0.65) return;
+      const alpha = Math.min(1, (t.pz + 0.15) / 0.85);
+      if (alpha <= 0) return;
+      const fs = Math.round(t.sz * t.scale);
+      ctx.font = `${fs}px 'Lora', serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0,0,0,0.9)';
+      ctx.shadowBlur  = 5;
+      const hex = t.color;
+      const r   = parseInt(hex.slice(1,3),16);
+      const g   = parseInt(hex.slice(3,5),16);
+      const b   = parseInt(hex.slice(5,7),16);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+      ctx.fillText(t.text, t.px, t.py);
+      ctx.shadowBlur = 0;
+    });
+    ctx.restore();
+
+    /* Brillo */
+    const spec = ctx.createRadialGradient(cx-R*0.38, cy-R*0.38, 0, cx-R*0.2, cy-R*0.2, R*0.5);
+    spec.addColorStop(0, 'rgba(255,255,255,0.12)');
+    spec.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI*2);
+    ctx.fillStyle = spec;
+    ctx.fill();
+
+    /* Sombra reflejo */
+    const ref = ctx.createRadialGradient(cx, cy+R+12, 1, cx, cy+R+12, R*0.45);
+    ref.addColorStop(0, 'rgba(123,109,181,0.1)');
+    ref.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.ellipse(cx, cy+R+16, R*0.4, R*0.07, 0, 0, Math.PI*2);
+    ctx.fillStyle = ref;
+    ctx.fill();
+  }
+
+  let last = 0;
+  function loop(ts) {
+    const dt = Math.min((ts-last)/16.7, 3);
+    last = ts;
+    if (!dragging) { rotY += 0.006*dt; rotX += 0.0003*dt; }
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  function gp(e) {
+    const r = canvas.getBoundingClientRect();
+    const s = e.touches ? e.touches[0] : e;
+    return { x: s.clientX-r.left, y: s.clientY-r.top };
+  }
+
+  canvas.addEventListener('mousedown',  e => { dragging=true; const p=gp(e); lx=p.x; ly=p.y; });
+  canvas.addEventListener('touchstart', e => { dragging=true; const p=gp(e); lx=p.x; ly=p.y; e.preventDefault(); }, {passive:false});
+  window.addEventListener('mousemove',  e => {
+    if (!dragging) return;
+    const p=gp(e); rotY+=(p.x-lx)*0.008; rotX+=(p.y-ly)*0.008;
+    rotX=Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, rotX)); lx=p.x; ly=p.y;
+  });
+  window.addEventListener('touchmove',  e => {
+    if (!dragging) return;
+    const p=gp(e); rotY+=(p.x-lx)*0.01; rotX+=(p.y-ly)*0.01;
+    rotX=Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, rotX)); lx=p.x; ly=p.y;
+    e.preventDefault();
+  }, {passive:false});
+  window.addEventListener('mouseup',  ()=>{ dragging=false; });
+  window.addEventListener('touchend', ()=>{ dragging=false; });
+  window.addEventListener('resize',   ()=>{ resize(); });
+
+  resize();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
